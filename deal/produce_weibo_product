@@ -1,0 +1,14 @@
+#! /bin/bash
+
+source ../config/set_env.sh
+
+db_name=wangdong
+table_input=weibo_origin
+table_output=weibo_product
+
+$HIVE -e "
+  set hive.exec.dynamic.partition.mode=nonstrict;
+  use $db_name;
+  from $table_input
+  insert overwrite table $table_output partition(week_seq) select * where mid!='mid';
+"
